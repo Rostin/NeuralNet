@@ -85,10 +85,10 @@ namespace Core {
 	[[nodiscard]] auto Neuron::getRandomWeight() noexcept ->double
 	{
 		const auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-		auto real_rand = std::bind(std::uniform_real_distribution<double>(0, 1),
-			std::mt19937_64(seed));
+		const auto dis = std::uniform_real_distribution<double>(0, 1);
+		auto gen = std::mt19937_64(seed);
 
-		return real_rand();
+		return dis(gen);
 	}
 	[[nodiscard]] auto Neuron::transferFunction(const double x) noexcept ->double
 	{
