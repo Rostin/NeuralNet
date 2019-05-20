@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Net.h"
 #include "TrainingData.h"
-
+#include <chrono>
 
 void showVectorVals(std::string label, std::vector<double>& v)
 {
@@ -18,6 +18,7 @@ auto main() -> int
 
 {
 
+	auto start = std::chrono::steady_clock::now();
 
 	Core::TrainingData trainData("trainingData.txt");
 	//e.g., {3, 2, 1 }
@@ -61,7 +62,7 @@ auto main() -> int
 		std::cout << "Net recent average error: "
 			<< myNet.getRecentAverageError() << std::endl;
 	}
-
-	std::cout << std::endl << "Done" << std::endl;
+	auto end = std::chrono::steady_clock::now();
+	std::cout << std::endl << "Done  "<< std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count()  << std::endl;
 	return 0;
 }
