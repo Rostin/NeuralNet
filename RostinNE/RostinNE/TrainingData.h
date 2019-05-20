@@ -5,15 +5,10 @@ namespace Core
 	{
 	public:
 		TrainingData(const std::string filename);
-		bool isEof(void)
-		{
-			return m_trainingDataFile.eof();
-		}
-		void getTopology(std::vector<unsigned>& topology);
-
-		// Returns the number of input values read from the file:
-		unsigned getNextInputs(std::vector<double>& inputVals);
-		unsigned getTargetOutputs(std::vector<double>& targetOutputVals);
+		[[nodiscard]] auto isEof() const noexcept ->bool;
+		[[nodiscard]] auto getTargetOutputs() noexcept->std::vector<double>;
+		[[nodiscard]] auto getTopology() noexcept->std::vector<unsigned>;
+		[[nodiscard]] auto getNextInputs() noexcept->std::vector<double>;
 
 	private:
 		std::ifstream m_trainingDataFile;

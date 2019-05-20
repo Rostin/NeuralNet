@@ -1,36 +1,33 @@
 #include "stdafx.h"
 #include "Net.h"
 #include "TrainingData.h"
+#define DEBUG true
+
+
 
 
 void showVectorVals(std::string label, std::vector<double>& v)
 {
 	std::cout << label << " ";
-	for (unsigned i = 0; i < v.size(); ++i)
+	for (auto val : v)
 	{
-		std::cout << v[i] << " ";
+		std::cout << val << " ";
 	}
-	std::cout << std::endl;
+	std::cout << "\n";
 }
 
 
 auto main() -> int
-
 {
+#ifdef DEBUG
+	auto start = std::chrono::steady_clock::now();
+#endif
 
 
 	Core::TrainingData trainData("trainingData.txt");
-	//e.g., {3, 2, 1 }
-	//std::vector<unsigned> topology;
-	//topology.push_back(3);
-	//topology.push_back(2);
-	//topology.push_back(1);
 
 
-
-
-	std::vector<unsigned> topology; topology;
-	trainData.getTopology(topology);
+	const auto topology = trainData.getTopology();
 	Core::Net myNet(topology);
 
 	std::vector<double> inputVals, targetVals, resultVals;
@@ -38,20 +35,20 @@ auto main() -> int
 	while (!trainData.isEof())
 	{
 		++trainingPass;
-		std::cout << std::endl << "Pass" << trainingPass;
+		std::cout << "\n" << "Pass" << trainingPass;
 
 		// Get new input data and feed it forward:
-		if (trainData.getNextInputs(inputVals) != topology[0])
+		if (inputVals = trainData.getNextInputs(); inputVals.size() != topology[0])
 			break;
 		showVectorVals(": Inputs :", inputVals);
 		myNet.feedForward(inputVals);
 
 		// Collect the net's actual results:
-		myNet.getResults(resultVals);
+		resultVals = myNet.getResults();
 		showVectorVals("Outputs:", resultVals);
 
 		// Train the net what the outputs should have been:
-		trainData.getTargetOutputs(targetVals);
+		targetVals = trainData.getTargetOutputs();
 		showVectorVals("Targets:", targetVals);
 		assert(targetVals.size() == topology.back());
 
@@ -59,9 +56,15 @@ auto main() -> int
 
 		// Report how well the training is working, average over recnet
 		std::cout << "Net recent average error: "
-			<< myNet.getRecentAverageError() << std::endl;
+			<< myNet.getRecentAverageError() << "\n";
 	}
 
-	std::cout << std::endl << "Done" << std::endl;
+#ifdef DEBUG
+	auto end = std::chrono::steady_clock::now();
+	std::cout << "\n" << "Done: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() <<"\n";
+#else 
+	std::cout << "\n" << "Done" << "\n";
+#endif
+	
 	return 0;
 }
