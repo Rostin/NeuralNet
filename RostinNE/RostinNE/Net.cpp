@@ -44,7 +44,7 @@ namespace Core {
 
 		// Forward propagate
 		for (size_t layerNum = 1; layerNum < m_layers.size(); ++layerNum) {
-			std::vector<Neuron>& prevLayer = m_layers[layerNum - 1];
+			Layer& prevLayer = m_layers[layerNum - 1];
 			for (unsigned n = 0; n < m_layers[layerNum].size() - 1; ++n) {
 				m_layers[layerNum][n].feedForward(prevLayer);
 			}
@@ -77,8 +77,8 @@ namespace Core {
 		}
 		for (size_t layerNum = m_layers.size() - 2; layerNum > 0; --layerNum)
 		{
-			std::vector<Neuron>& hiddenLayer = m_layers[layerNum];
-			std::vector<Neuron>& nextLayer = m_layers[static_cast<uint64_t>(layerNum) + 1];
+			Layer& hiddenLayer = m_layers[layerNum];
+			Layer& nextLayer = m_layers[static_cast<uint64_t>(layerNum) + 1];
 			for(auto& h : hiddenLayer)
 			{
 				h.calcHiddenGradients(nextLayer);
@@ -87,8 +87,8 @@ namespace Core {
 
 		for (size_t layerNum = m_layers.size() - 1; layerNum > 0; --layerNum)
 		{
-			std::vector<Neuron>& layer = m_layers[layerNum];
-			std::vector<Neuron>& prevLayer = m_layers[layerNum - 1];
+			Layer& layer = m_layers[layerNum];
+			Layer& prevLayer = m_layers[layerNum - 1];
 
 			for (size_t n = 0; n < layer.size() - 1; ++n)
 			{

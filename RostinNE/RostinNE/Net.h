@@ -12,7 +12,7 @@ namespace Core {
 		[[nodiscard]] auto getResults() const noexcept->std::vector<double>;
 		[[nodiscard]] auto getRecentAverageError() const noexcept ->double;
 	private:
-		std::vector<std::vector<Neuron>> m_layers;
+		std::vector<Layer> m_layers;
 		double m_error = -1;
 		double m_recentAverageError = -1;
 		double m_recentAverageSmoothingFactor = 100.0; // Number of training samples to average over

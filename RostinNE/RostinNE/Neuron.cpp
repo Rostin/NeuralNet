@@ -29,7 +29,7 @@ namespace Core {
 	}
 
 
-	void Neuron::feedForward(const std::vector<Neuron>& prevLayer) noexcept
+	void Neuron::feedForward(const Layer& prevLayer) noexcept
 	{
 		auto sum = 0.0;
 
@@ -48,14 +48,14 @@ namespace Core {
 	}
 
 
-	void Neuron::calcHiddenGradients(const std::vector<Neuron>& nextLayer) noexcept
+	void Neuron::calcHiddenGradients(const Layer& nextLayer) noexcept
 	{
 		const auto dow = sumDOW(nextLayer);
 		m_gradient = dow * Neuron::transferFunctionDerivative(m_outputVal);
 	}
 
 
-	void Neuron::updateInputWeights(std::vector<Neuron>& prevLayer) noexcept
+	void Neuron::updateInputWeights(Layer& prevLayer) noexcept
 	{
 		for(auto& neuron : prevLayer)
 		{
@@ -72,7 +72,7 @@ namespace Core {
 		}
 	}
 
-	[[nodiscard]] auto Neuron::sumDOW(const std::vector<Neuron>& nextLayer) const noexcept ->double
+	[[nodiscard]] auto Neuron::sumDOW(const Layer& nextLayer) const noexcept ->double
 	{
 		auto sum = 0.0;
 		for (size_t n = 0; n < nextLayer.size() - 1; ++n)
