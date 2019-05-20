@@ -9,9 +9,9 @@
 void showVectorVals(std::string label, std::vector<double>& v)
 {
 	std::cout << label << " ";
-	for (unsigned i = 0; i < v.size(); ++i)
+	for (auto val : v)
 	{
-		std::cout << v[i] << " ";
+		std::cout << val << " ";
 	}
 	std::cout << "\n";
 }
