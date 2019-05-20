@@ -2,38 +2,49 @@
 #include "Net.h"
 
 namespace Core {
+
+	double Net::m_recentAverageSmoothingFactor = 100.0; // Number of training samples to average over
+
 	Net::Net(const std::vector<unsigned>& topology)
 	{
-		const unsigned numLayers = topology.size();
+		unsigned numLayers = topology.size();
+		for (unsigned layerNum = 0; layerNum < numLayers; ++layerNum) {
+			// numOutputs of layer[i] is the numInputs of layer[i+1]
+			// numOutputs of last layer is 0
+			unsigned numOutputs = layerNum == topology.size() - 1 ? 0 : topology[layerNum + 1];
 
-		for (unsigned layerNum = 0; layerNum < numLayers; ++layerNum)
-		{
-			m_layers.push_back(std::vector<Neuron>());
-			unsigned numOfOutputs = layerNum == topology.size() - 1 ? 0 : topology[layerNum + 1];
-			for (unsigned neuronNum = 0; neuronNum <= topology[layerNum]; ++neuronNum)
-			{
-				m_layers.back().push_back(Neuron(numOfOutputs,neuronNum));
-				std::cout << "Made a neuron\n";
+			auto& blah = m_layers.emplace_back();
+
+			blah.reserve(topology[layerNum]);
+
+			// We have made a new Layer, now fill it ith neurons, and
+			// add a bias neuron to the layer:
+			for (unsigned neuronNum = 0; neuronNum <= topology[layerNum]; ++neuronNum) {
+				blah.emplace_back(numOutputs, neuronNum);
+				std::cout << "Made a Neuron!" << std::endl;
 			}
-			m_layers.back().back().setOutputVal(1.0);
 
+			// Force the bias node's output value to 1.0. It's the last neuron created above
+			m_layers.back().back().setOutputVal(1.0);
 		}
 
 	}
+
+
 	void Net::feedForward(std::vector<double>& inputVals)
 	{
-		//assert(inputVals.size() == m_layers[0].size() - 1);
+		// Check the num of inputVals euqal to neuronnum expect bias
+		assert(inputVals.size() == m_layers[0].size() - 1);
 
-		for (unsigned i = 0; i < inputVals.size(); ++i)
-		{
+		// Assign {latch} the input values into the input neurons
+		for (unsigned i = 0; i < inputVals.size(); ++i) {
 			m_layers[0][i].setOutputVal(inputVals[i]);
 		}
 
-		for (unsigned layerNum = 1; layerNum < m_layers.size(); ++layerNum)
-		{
+		// Forward propagate
+		for (unsigned layerNum = 1; layerNum < m_layers.size(); ++layerNum) {
 			std::vector<Neuron>& prevLayer = m_layers[layerNum - 1];
-			for (unsigned n = 0; n < m_layers.size(); ++n)
-			{
+			for (unsigned n = 0; n < m_layers[layerNum].size() - 1; ++n) {
 				m_layers[layerNum][n].feedForward(prevLayer);
 			}
 		}
@@ -94,5 +105,10 @@ namespace Core {
 		{
 			resultVals.push_back(m_layers.back()[n].getOutputVal());
 		}
+	}
+
+	double Net::getRecentAverageError() const
+	{
+		 return m_recentAverageError; 
 	}
 }

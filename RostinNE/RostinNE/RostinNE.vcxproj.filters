@@ -24,6 +24,9 @@
     <ClCompile Include="Neuron.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TrainingData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Net.h">
@@ -35,8 +38,19 @@
     <ClInclude Include="Neuron.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="TrainingData.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="trainingData.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="out.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
