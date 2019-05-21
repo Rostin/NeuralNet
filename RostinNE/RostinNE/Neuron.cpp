@@ -9,15 +9,15 @@ namespace Core {
 	{
 		m_outputWeights.reserve(numOfOutputs);
 
-		for (unsigned c = 0; c < numOfOutputs; ++c)
+		for (auto c{ 0u }; c < numOfOutputs; ++c)
 		{
-			auto& w = m_outputWeights.emplace_back();
+			auto& w{ m_outputWeights.emplace_back() };
 			w.weight = getRandomWeight();
 		}
 	}
 
 
-	[[nodiscard]] constexpr auto Neuron::getOutputVal() const noexcept ->double
+	[[nodiscard]] auto Neuron::getOutputVal() const noexcept ->double
 	{
 		return m_outputVal;
 	}
@@ -31,35 +31,38 @@ namespace Core {
 
 	void Neuron::feedForward(const Layer& prevLayer) noexcept
 	{
-		auto sum = 0.0;
+		const auto sum {
+			std::accumulate(prevLayer.cbegin(), prevLayer.cend(), .0,
+			[&](auto sum, auto & pLayer)
+			{
+				return sum + pLayer.getOutputVal() * pLayer.m_outputWeights[m_myIndex].weight;
+			})
+		};
 
-		for(const auto& neuron : prevLayer)
-		{
-			sum += neuron.getOutputVal() * neuron.m_outputWeights[m_myIndex].weight;
-		}
-		m_outputVal = Neuron::transferFunction(sum);
+		m_outputVal = transferFunction(sum);
 	}
 	
 
 	void Neuron::calcOutputGradients(const double targetVal) noexcept
 	{
-		const auto delta = targetVal - m_outputVal;
-		m_gradient = delta * Neuron::transferFunctionDerivative(m_outputVal);
+		const auto delta{ targetVal - m_outputVal };
+		m_gradient = delta * transferFunctionDerivative(m_outputVal);
 	}
 
 
 	void Neuron::calcHiddenGradients(const Layer& nextLayer) noexcept
 	{
-		const auto dow = sumDOW(nextLayer);
-		m_gradient = dow * Neuron::transferFunctionDerivative(m_outputVal);
+		const auto dow{ sumDOW(nextLayer) };
+		m_gradient = dow * transferFunctionDerivative(m_outputVal);
 	}
 
 
 	void Neuron::updateInputWeights(Layer& prevLayer) noexcept
 	{
+
 		for(auto& neuron : prevLayer)
 		{
-			const auto oldDeltaWeight = neuron.m_outputWeights[m_myIndex].deltaWeight;
+			const auto oldDeltaWeight{ neuron.m_outputWeights[m_myIndex].deltaWeight };
 
 			const auto newDeltaWeight =
 				eta
@@ -74,19 +77,19 @@ namespace Core {
 
 	[[nodiscard]] auto Neuron::sumDOW(const Layer& nextLayer) const noexcept ->double
 	{
-		auto sum = 0.0;
-		for (size_t n = 0; n < nextLayer.size() - 1; ++n)
-		{
-			sum += m_outputWeights[n].weight * nextLayer[n].m_gradient;
-		}
-		return sum;
+		auto idx{ size_t{0} };
+		return std::accumulate(std::cbegin(m_outputWeights), std::cend(m_outputWeights), .0,
+			[&](auto sum, auto & weights)
+			{
+				return sum + (weights.weight * nextLayer[idx++].m_gradient);
+			});
 	}
 
 	[[nodiscard]] auto Neuron::getRandomWeight() noexcept ->double
 	{
-		const auto seed = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-		const auto dis = std::uniform_real_distribution<double>(0, 1);
-		auto gen = std::mt19937_64(seed);
+		const auto seed{ std::chrono::high_resolution_clock::now().time_since_epoch().count() };
+		const auto dis{ std::uniform_real_distribution<double>(0, 1) };
+		auto gen{ std::mt19937_64(seed) };
 
 		return dis(gen);
 	}
@@ -96,6 +99,6 @@ namespace Core {
 	}
 	[[nodiscard]] auto Neuron::transferFunctionDerivative(const double x) noexcept ->double
 	{
-		return 1.0 - x*x;
+		return 1.0 - std::pow(x, 2);
 	}
 }

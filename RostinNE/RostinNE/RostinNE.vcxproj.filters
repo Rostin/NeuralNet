@@ -27,6 +27,9 @@
     <ClCompile Include="TrainingData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Net.h">
@@ -42,6 +45,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Connection.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Defines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INet.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INeuron.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,9 +18,11 @@ namespace Core {
 
 	[[nodiscard]] auto TrainingData::getTargetOutputs() noexcept ->std::vector<double>
 	{
+		using namespace std::literals::string_literals;
+
 		auto targetOutputVals{ std::vector<double>{} };
-		auto line{ std::string("") };
-		auto label{ std::string("") };
+		auto line{ ""s };
+		auto label{ ""s };
 
 		std::getline(m_trainingDataFile, line);
 
@@ -29,7 +31,7 @@ namespace Core {
 
 		if (label.compare("out") != 0)
 		{
-			auto oneValue = 0.0;
+			auto oneValue{ 0.0 };
 			while (ss >> oneValue)
 			{
 				targetOutputVals.push_back(oneValue);
@@ -41,9 +43,11 @@ namespace Core {
 
 	[[nodiscard]] auto TrainingData::getTopology() noexcept ->std::vector<unsigned>
 	{
+		using namespace std::literals::string_literals;
+
 		auto topology{ std::vector<unsigned>{} };
-		auto line{ std::string("") };
-		auto label{ std::string("") };
+		auto line{ ""s };
+		auto label{ ""s };
 
 		std::getline(m_trainingDataFile, line);
 
@@ -57,7 +61,7 @@ namespace Core {
 
 		while (!ss.eof())
 		{
-			auto n = 0u;
+			auto n{ 0u };
 			ss >> n;
 			topology.push_back(n);
 		}
@@ -67,9 +71,11 @@ namespace Core {
 
 	[[nodiscard]] auto TrainingData::getNextInputs() noexcept ->std::vector<double>
 	{
+		using namespace std::literals::string_literals;
+
 		auto inputVals{ std::vector<double> {} };
-		auto line{ std::string("") };
-		auto label{ std::string("") };
+		auto line{ ""s };
+		auto label{ ""s };
 
 		std::getline(m_trainingDataFile, line);
 		auto ss{ std::stringstream(line) };
@@ -78,7 +84,7 @@ namespace Core {
 
 		if (label.compare("in:") == 0)
 		{
-			auto oneValue = 0.0;
+			auto oneValue{ 0.0 };
 			while (ss >> oneValue)
 			{
 				inputVals.push_back(oneValue);

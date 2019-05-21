@@ -1,21 +1,20 @@
 #pragma once
-#include "Neuron.h"
+#include "INet.h"
 namespace Core {
 
 
-	class Net
+	class Net : public INet
 	{
 	public:
 		Net(const std::vector<unsigned> &topology);
-		void feedForward(const std::vector<double> &inputVals);
-		void backProp(std::vector<double>& targetVals) noexcept;
-		[[nodiscard]] auto getResults() const noexcept->std::vector<double>;
-		[[nodiscard]] auto getRecentAverageError() const noexcept ->double;
-	private:
-		std::vector<Layer> m_layers;
-		double m_error = -1;
-		double m_recentAverageError = -1;
-		double m_recentAverageSmoothingFactor = 100.0; // Number of training samples to average over
-
+		virtual void feedForward(const std::vector<double> &inputVals) override;
+		virtual void backProp(std::vector<double>& targetVals) noexcept override;
+		[[nodiscard]] virtual auto getResults() const noexcept ->std::vector<double> override;
+		[[nodiscard]] virtual auto getRecentAverageError() const noexcept ->double override;
+	protected:
+		std::vector<Neuron::Layer> m_layers{};
+		double m_error{ -1 };
+		double m_recentAverageError{ -1 };
+		double m_recentAverageSmoothingFactor{ 100.0 }; // Number of training samples to average over
 	};
 }
