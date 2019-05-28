@@ -12,7 +12,7 @@ namespace Core {
 		[[nodiscard]] virtual auto getResults() const noexcept ->std::vector<double> override;
 		[[nodiscard]] virtual auto getRecentAverageError() const noexcept ->double override;
 	protected:
-		std::vector<Neuron::Layer> m_layers{};
+		std::vector<Neuron::Neurons> m_layers{};
 		double m_error{ -1 };
 		double m_recentAverageError{ -1 };
 		double m_recentAverageSmoothingFactor{ 100.0 }; // Number of training samples to average over
