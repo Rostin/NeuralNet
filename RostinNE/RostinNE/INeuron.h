@@ -20,14 +20,6 @@ namespace Core
 		[[nodiscard]] virtual auto getRandomWeight() noexcept ->double = 0;
 		[[nodiscard]] virtual auto transferFunction(const double x) noexcept ->double = 0;
 		[[nodiscard]] virtual auto transferFunctionDerivative(const double x) noexcept ->double = 0;
-	protected:
-		unsigned m_myIndex{ 0 };
-		double m_outputVal{ -1.0 };
-		double m_gradient{ -1.0 };
-
-		double eta = { 0.15 }; //[0.0...1.0] training rate
-		double alpha = { 0.5 }; //[0.0....n] momentum
-
-		std::vector<Connection> m_outputWeights{};
+		
 	};
 }

@@ -85,7 +85,7 @@ namespace Core {
 
 			for(auto& h : hiddenLayer)
 			{
-				h.calcHiddenGradients(nextLayer);
+				h.calcHiddenGradients(*(dynamic_cast<INeuron::Layer>(&nextLayer)));
 			}
 		}
 
